@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Remote Spotify Music Client</title>
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<link rel='icon' href="/favicon.ico" />
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+	</head>
+	<body unresolved>
+		<core-toolbar>
+			<paper-icon-button icon="blank"></paper-icon-button>
+			<span flex>Remote Spotify Music Client</span>
+			<paper-icon-button icon="refresh" onClick="window.location.reload()"></paper-icon-button>
+		</core-toolbar>
+		<div class="content">
+			<hr>
+			<h2>Currently Playing</h2>
+			<h3 id="nowplaying">...</h3>
+			<paper-input floatingLabel label="Search" id="uri"></paper-input>
+			<paper-button raisedButton label="Play" id="playbutton"></paper-button>&nbsp;&nbsp;
+			<paper-button raisedButton label="Queue" id="queuebutton"></paper-button>&nbsp;&nbsp;
+			<paper-button raisedButton label="Queue Next" id="queuenextbutton"></paper-button>&nbsp;&nbsp;
+			<paper-button raisedButton label="pause" id="pausebutton"></paper-button>&nbsp;&nbsp;
+			<paper-button raisedButton label="Next" id="nextbutton"></paper-button>&nbsp;&nbsp;
+			<paper-button raisedButton label="Stop" id="stopbutton"></paper-button>
+			<paper-shadow z="1"></paper-shadow>
+			<hr>
+		</div>
+	</body>
+    <script src="/socket.io/socket.io.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script src="/components/platform/platform.js"></script>
+	<link rel="import" href="/components/font-roboto/roboto.html">
+	<link rel="import" href="/components/core-icons/core-icons.html">
+	<link rel="import" href="/components/core-icons/av-icons.html">
+	<link rel="import" href="/components/core-toolbar/core-toolbar.html">
+	<link rel="import" href="/components/paper-icon-button/paper-icon-button.html">
+	<link rel="import" href="/components/paper-toast/paper-toast.html">
+	<link rel="import" href="/components/paper-input/paper-input.html">
+	<link rel="import" href="/components/paper-button/paper-button.html">
+	<link rel="import" href="/components/paper-shadow/paper-shadow.html">
+	<link rel="stylesheet" href="/components/paper-shadow/paper-shadow.css">
+	<script>
+		var socket = io();
+		
+		CoreStyle.g.paperInput.focusedColor = '#7AB800';
+
+		socket.on('connect', function()
+		{
+			socket.on('nowplaying', function(text)
+			{
+				$('#nowplaying').text(text);
+			});
+		});
+
+		$('#stopbutton').click(function()
+		{
+			socket.emit('stop');
+		});
+		
+		$('#nextbutton').click(function()
+		{
+			socket.emit('next');
+		});
+		
+		$('#pausebutton').click(function()
+		{
+			socket.emit('pause');
+		});
+		
+		$("#uri").keyup(function (e)
+		{
+			if (e.keyCode == 13)
+			{
+				play();
+			}
+		});
+
+		$('#playbutton').click(play);
+		
+		function play()
+		{
+			var searchbox = $('#uri');
+			var value = searchbox.val();
+			if(value !== "")
+			{
+				socket.emit('play', value);
+				searchbox.val('');
+				searchbox.attr('label', 'Playing!');
+				setTimeout(function(){ searchbox.attr('label', 'Search'); }, 4000);
+			}
+		}
+		
+		$('#queuebutton').click(function()
+		{
+			var searchbox = $('#uri');
+			var value = searchbox.val();
+			if(value !== "")
+			{
+				socket.emit('queue', value);
+				searchbox.val('');
+				searchbox.attr('label', 'Queued!');
+				setTimeout(function(){ searchbox.attr('label', 'Search'); }, 4000);
+			}
+		});
+		
+		$('#queuenextbutton').click(function()
+		{
+			var searchbox = $('#uri');
+			var value = searchbox.val();
+			if(value !== "")
+			{
+				socket.emit('queuenext', value);
+				searchbox.val('');
+				searchbox.attr('label', 'Queued!');
+				setTimeout(function(){ searchbox.attr('label', 'Search'); }, 4000);
+			}
+		});
+	</script>
+</html>

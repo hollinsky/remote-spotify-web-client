@@ -1,0 +1,42 @@
+body
+{
+	font: 14px RobotoDraft, Helvetica, Arial, sans-serif;
+	width: 100%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+core-toolbar
+{
+	background: #7AB800;
+	color: #f1f1f1;
+	fill: #f1f1f1;
+}
+
+paper-input
+{
+	margin: 0 auto;
+	text-align: left;
+}
+
+paper-input::shadow #ripple
+{
+    color: #7AB800;
+}
+
+h3
+{
+	font-weight: 300;
+}
+
+hr
+{
+	margin-top: 20px;
+	opacity: 0;
+}
+
+.content
+{
+	width: 600px;
+	margin: 0 auto;
+}
