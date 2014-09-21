@@ -13,4 +13,6 @@ The interface is straightforward and simple. Input a track name, and it will pla
 
 I'd be happy to see pull requests or changes made to this, so feel free to submit them.
 
+Neither I nor this program are affiliated with Spotify in any way shape or form.
+
 Paul Hollinsky 2014
